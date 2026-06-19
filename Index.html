@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toko Berkah — Katalog Online</title>
+  <meta name="description" content="Katalog online Toko Berkah. Lihat produk, tanya admin via WhatsApp, atau pesan langsung lewat form pemesanan offline.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===================== HEADER / NAV ===================== -->
+  <header class="header">
+    <nav class="nav container">
+      <a href="#beranda" class="nav__brand">
+        <span class="nav__brand-mark">TB</span>
+        Toko Berkah
+      </a>
+
+      <ul class="nav__menu" id="navMenu">
+        <li><a href="#beranda">Beranda</a></li>
+        <li><a href="#katalog">Katalog</a></li>
+        <li><a href="#tentang">Tentang Kami</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="beranda">
+    <div class="container hero__inner">
+      <span class="hero__eyebrow">Katalog Resmi</span>
+      <h1>Belanja mudah, pesan cepat lewat WhatsApp</h1>
+      <p>Pilih produk, tanya admin kalau ragu, atau langsung isi form pemesanan offline — total harga terhitung otomatis.</p>
+      <div class="hero__search">
+        <span class="hero__search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Cari nama produk...">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== KATALOG ===================== -->
+  <section class="catalog container" id="katalog">
+    <div class="catalog__header">
+      <h2>Katalog Produk</h2>
+      <span class="result-counter" id="resultCounter"></span>
+    </div>
+
+    <div class="chip-row" id="categoryMenu"></div>
+
+    <div class="product-grid" id="productGrid"></div>
+
+    <div class="empty-state" id="emptyState" hidden>
+      <span>🗂️</span>
+      <p>Produk tidak ditemukan. Coba kata kunci lain atau pilih kategori "Semua".</p>
+    </div>
+  </section>
+
+  <!-- ===================== TENTANG ===================== -->
+  <section class="container" id="tentang" style="padding: 0 24px 64px;">
+    <h2 style="margin-bottom: 12px; font-size: 1.4rem;">Tentang Kami</h2>
+    <p style="max-width: 640px; color: var(--color-text-muted);">
+      Toko Berkah menyediakan kebutuhan harian dengan harga bersahabat. Setiap pesanan dapat dikonfirmasi
+      langsung oleh admin sebelum diproses, sehingga lebih aman dan sesuai kebutuhan Anda.
+    </p>
+  </section>
+
+  <!-- ===================== FOOTER / KONTAK ===================== -->
+  <footer class="footer" id="kontak">
+    <div class="container footer__inner">
+      <div>
+        <p class="footer__brand">Toko Berkah</p>
+        <p>Belanja mudah, pesan cepat.</p>
+      </div>
+      <div class="footer__contact">
+        <p>Hubungi admin</p>
+        <a href="https://wa.me/6281322363337" target="_blank" rel="noopener">WhatsApp 0813-2236-3337</a>
+      </div>
+    </div>
+    <p class="footer__bottom container">© <span id="yearNow"></span> Toko Berkah. Semua hak dilindungi.</p>
+  </footer>
+
+  <!-- ===================== MODAL: FORM PEMESANAN OFFLINE ===================== -->
+  <div class="modal" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="modalProductName">
+    <div class="modal__overlay" id="modalOverlay"></div>
+    <div class="modal__card">
+      <div class="modal__edge"></div>
+      <div class="modal__head">
+        <h3>Form Pemesanan Offline</h3>
+        <button type="button" class="modal__close" id="modalClose" aria-label="Tutup">✕</button>
+      </div>
+
+      <!-- struk ringkasan produk -->
+      <div class="receipt">
+        <div class="receipt__product">
+          <div class="receipt__visual" id="modalProductVisual"></div>
+          <div>
+            <p class="receipt__name" id="modalProductName"></p>
+            <p class="receipt__price" id="modalProductPrice"></p>
+          </div>
+        </div>
+
+        <div class="receipt__qty-row">
+          <div class="qty-stepper">
+            <button type="button" id="qtyMinus" aria-label="Kurangi jumlah">−</button>
+            <span id="qtyValue">1</span>
+            <button type="button" id="qtyPlus" aria-label="Tambah jumlah">+</button>
+          </div>
+          <span class="receipt__subtotal" id="orderSubtotal"></span>
+        </div>
+
+        <div class="receipt__total-row">
+          <span>Total Pesanan</span>
+          <span id="orderTotal"></span>
+        </div>
+      </div>
+
+      <!-- form data pemesan -->
+      <form class="order-form" id="orderForm">
+        <div class="field">
+          <label for="fieldNama">Nama Lengkap</label>
+          <input type="text" id="fieldNama" name="nama" autocomplete="name">
+          <span class="field-error" id="fieldNamaError"></span>
+        </div>
+
+        <div class="field">
+          <label for="fieldHp">No. HP / WhatsApp</label>
+          <input type="tel" id="fieldHp" name="hp" autocomplete="tel" placeholder="08xxxxxxxxxx">
+          <span class="field-error" id="fieldHpError"></span>
+        </div>
+
+        <div class="field">
+          <label for="fieldEmail">Email</label>
+          <input type="email" id="fieldEmail" name="email" autocomplete="email">
+          <span class="field-error" id="fieldEmailError"></span>
+        </div>
+
+        <div class="field">
+          <label for="fieldAlamat">Alamat Lengkap</label>
+          <textarea id="fieldAlamat" name="alamat" placeholder="Nama jalan, RT/RW, kelurahan, kecamatan, kota"></textarea>
+          <span class="field-error" id="fieldAlamatError"></span>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--block">Kirim Pesanan via WhatsApp</button>
+        <div class="order-success" id="orderSuccess" hidden>Pesanan terkirim. Menunggu konfirmasi admin di WhatsApp.</div>
+      </form>
+    </div>
+  </div>
+
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
